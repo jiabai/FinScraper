@@ -1,15 +1,49 @@
 # FinScraper
 
-金融数据爬虫项目
+基于 akshare 的金融数据获取工具，支持 CLI 和 Python API。
+
+## 快速开始
+
+### 安装
+
+```bash
+pip install -e .
+```
+
+### CLI 使用
+
+```bash
+# 获取指数实时行情
+finscraper index spot
+
+# 获取指数历史数据
+finscraper index history 000001 --start-date 20240101 --end-date 20241231
+```
+
+### Python API 使用
+
+```python
+from finscraper.fetchers.index import IndexFetcher
+from finscraper.storage.csv_storage import CSVStorage
+
+# 获取数据
+fetcher = IndexFetcher()
+data = fetcher.fetch_spot()
+
+# 保存数据
+storage = CSVStorage()
+storage.save(data, "data/index/spot.csv")
+```
 
 ## 项目结构
 
 ```
 FinScraper/
 ├── finscraper/          # 主代码包
-│   ├── spiders/         # 爬虫模块
-│   ├── utils/           # 工具函数
+│   ├── core/            # 核心模块
+│   ├── fetchers/        # 数据获取模块
 │   ├── models/          # 数据模型
+│   ├── storage/         # 存储模块
 │   └── config/          # 配置文件
 ├── tests/               # 测试代码
 ├── data/                # 数据文件（不提交到Git）
@@ -19,13 +53,13 @@ FinScraper/
 └── README.md            # 项目说明
 ```
 
-## 安装依赖
+## 开发
+
+### 安装依赖
 
 ```bash
 pip install -e .[dev]
 ```
-
-## 代码规范
 
 ### 代码格式化
 
