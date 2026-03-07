@@ -4,7 +4,7 @@
 - **项目名称**: FinScraper
 - **创建日期**: 2026-03-07
 - **负责人**: FinScraper Team
-- **版本**: v1.3
+- **版本**: v1.4
 
 ---
 
@@ -312,12 +312,20 @@ FinScraper/
 
   class AkShareClient:
       @staticmethod
-      def get_index_zh_a_spot_em() -> pd.DataFrame:
-          return ak.index_zh_a_spot_em()
+      def get_index_zh_a_spot_sina() -> pd.DataFrame:
+          return ak.stock_zh_index_spot_sina()
 
       @staticmethod
-      def get_stock_em_hsgt_north_net_flow_in_em(symbol: str) -> pd.DataFrame:
-          return ak.stock_em_hsgt_north_net_flow_in_em(symbol=symbol)
+      def get_stock_hsgt_fund_flow_summary_em() -> pd.DataFrame:
+          return ak.stock_hsgt_fund_flow_summary_em()
+      
+      @staticmethod
+      def get_stock_hsgt_fund_min_em() -> pd.DataFrame:
+          return ak.stock_hsgt_fund_min_em()
+      
+      @staticmethod
+      def get_stock_sector_spot() -> pd.DataFrame:
+          return ak.stock_sector_spot()
   ```
 
 #### 3.3.4 Models 层（数据模型层）
@@ -389,10 +397,7 @@ finscraper
 │   └── intraday            # 获取分时数据
 │
 ├── sector                  # 板块数据命令组
-│   ├── list                # 列出板块
-│   ├── spot                # 板块实时行情
-│   ├── stocks              # 板块成分股
-│   └── history             # 板块历史数据
+│   └── spot                # 板块实时行情（包含板块列表）
 │
 ├── commodity               # 大宗商品命令组
 │   ├── list                # 列出商品
@@ -468,26 +473,12 @@ finscraper north-flow intraday \
 
 #### 3.4.5 Sector 命令详解
 
-**list - 列出板块**
-```bash
-finscraper sector list \
-    --type industry|concept|region \
-    --format table|json
-```
-
-**spot - 板块实时行情**
+**spot - 板块实时行情（包含板块列表）**
 ```bash
 finscraper sector spot \
-    --type industry \
-    --output csv \
-    --output-path data/sector/industry_spot.csv
-```
-
-**stocks - 板块成分股**
-```bash
-finscraper sector stocks "半导体" \
-    --output csv \
-    --output-path data/sector/semiconductor_stocks.csv
+    --format table|json \
+    --output csv|json|parquet|sqlite \
+    --output-path data/sector/spot.csv
 ```
 
 #### 3.4.6 Commodity 命令详解
@@ -599,7 +590,7 @@ finscraper index history 000001 --start-date 20240101 --end-date 20241231 --outp
 finscraper north-flow daily --output csv
 
 # 获取板块数据
-finscraper sector spot --type industry --output csv
+finscraper sector spot --output csv
 
 # 一键获取所有数据（详细日志）
 finscraper -v fetch-all
@@ -791,7 +782,7 @@ class NewsItem(BaseModel):
 - 历史数据: 日期、开盘价、最高价、最低价、收盘价、成交量、成交额、涨跌幅
 
 **akshare 接口**:
-- `ak.index_zh_a_spot_em()` - 实时行情
+- `ak.stock_zh_index_spot_sina()` - 实时行情（新浪财经数据源）
 - `ak.index_zh_a_hist(symbol, period, start_date, end_date)` - 历史数据
 
 #### 3.6.2 北向资金数据需求
@@ -803,9 +794,8 @@ class NewsItem(BaseModel):
 - 分时数据: 时间点、沪股通净流入、深股通净流入、合计净流入
 
 **akshare 接口**:
-- `ak.stock_em_hsgt_north_net_flow_in_em()` - 单日净流入
-- `ak.stock_em_hsgt_north_net_flow_in_em(symbol="北向")` - 北向资金
-- `ak.stock_em_hsgt_hist_em(symbol="北向")` - 历史数据
+- `ak.stock_hsgt_fund_flow_summary_em()` - 单日净流入数据
+- `ak.stock_hsgt_fund_min_em()` - 分时数据
 
 #### 3.6.3 板块数据需求
 
@@ -825,11 +815,7 @@ class NewsItem(BaseModel):
 - 板块成分股列表
 
 **akshare 接口**:
-- `ak.stock_board_industry_name_em()` - 行业板块列表
-- `ak.stock_board_industry_summary_EM()` - 行业板块详情
-- `ak.stock_board_concept_name_em()` - 概念板块列表
-- `ak.stock_board_concept_summary_em()` - 概念板块详情
-- `ak.stock_board_industry_cons_em(symbol)` - 板块成分股
+- `ak.stock_sector_spot()` - 板块实时行情
 
 #### 3.6.4 大宗商品数据需求
 
@@ -1189,6 +1175,7 @@ class Settings(BaseSettings):
 | v1.1 | 2026-03-07 | FinScraper Team | 细化需求，加入 akshare 和 6 类数据详细需求 |
 | v1.2 | 2026-03-07 | FinScraper Team | 补充错误处理、日志系统、配置说明、性能考虑、安全考虑、快速开始、FAQ |
 | v1.3 | 2026-03-07 | FinScraper Team | 添加完整的 CLI 设计，包括命令结构、参数说明、使用示例 |
+| v1.4 | 2026-03-08 | FinScraper Team | 更新 API 引用：将 A 股指数数据源切换为新浪财经（stock_zh_index_spot_sina），更新北向资金 API（stock_hsgt_fund_flow_summary_em、stock_hsgt_fund_min_em），更新板块 API（stock_sector_spot）；简化 sector 命令，只保留 spot 命令 |
 
 ---
 

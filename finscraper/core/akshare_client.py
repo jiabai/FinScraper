@@ -77,30 +77,30 @@ class AkShareClient:
         """Get north-bound capital flow daily data."""
         try:
             logger.info("Fetching north flow daily data")
-            return ak.stock_em_hsgt_north_net_flow_in_em(symbol="北向")
+            return ak.stock_hsgt_fund_flow_summary_em()
         except Exception as e:
             logger.error(f"Failed to fetch north flow data: {e}")
             raise NetworkError(f"Failed to fetch north flow data: {e}")
     
     def fetch_em_north_flow_20(self) -> pd.DataFrame:
-        """Fetch northbound capital flow 2020 data."""
-        return self._call_akshare("stock_em_hsgt_north_net_flow_in_em", symbol="北向")
+        """Fetch northbound capital flow daily data."""
+        return self._call_akshare("stock_hsgt_fund_flow_summary_em")
     
     def fetch_em_north_flow_today(self) -> pd.DataFrame:
-        """Fetch northbound capital flow today data."""
-        return self._call_akshare("stock_em_hsgt_north_net_flow_in_em", symbol="北向")
+        """Fetch northbound capital flow intraday data."""
+        return self._call_akshare("stock_hsgt_fund_min_em")
     
     def fetch_sector_list_ths(self) -> pd.DataFrame:
-        """Fetch sector list from TongHuaShun."""
-        return self._call_akshare("sector_list_ths")
+        """Fetch sector list from East Money."""
+        return self._call_akshare("stock_sector_spot")
     
     def fetch_sector_spot_ths(self) -> pd.DataFrame:
-        """Fetch sector spot data from TongHuaShun."""
-        return self._call_akshare("sector_spot_ths")
+        """Fetch sector spot data from East Money."""
+        return self._call_akshare("stock_sector_spot")
     
     def fetch_sector_detail_ths(self, symbol: str) -> pd.DataFrame:
-        """Fetch sector detail from TongHuaShun."""
-        return self._call_akshare("sector_detail_ths", symbol=symbol)
+        """Fetch sector detail (not implemented)."""
+        raise NotImplementedError("Sector detail not implemented yet")
     
     def fetch_commodity_spot_em(self) -> pd.DataFrame:
         """Fetch commodity spot data from East Money."""

@@ -20,7 +20,7 @@
 
 | 数据类型 | 说明 | 数据源 |
 |---------|------|--------|
-| A 股指数 | 上证指数、深证成指、创业板指等 | 东方财富 |
+| A 股指数 | 上证指数、深证成指、创业板指等 | 新浪财经 |
 | 北向资金 | 沪股通、深股通资金流向 | 东方财富 |
 | 板块数据 | 行业板块、概念板块数据 | 东方财富 |
 | 大宗商品 | 黄金、白银、原油等商品行情 | 东方财富 |
@@ -37,48 +37,153 @@ pip install -e .
 
 ### CLI 使用
 
+#### 全局选项
+
 ```bash
 # 查看版本
 finscraper --version
+finscraper -V
 
 # 查看帮助
 finscraper --help
 
-# 获取指数实时行情
+# 详细日志模式 (-v=INFO, -vv=DEBUG)
+finscraper -v index spot
+finscraper -vv index spot
+
+# 安静模式（只显示错误）
+finscraper -q index spot
+
+# 指定配置文件
+finscraper -c config.yaml index spot
+```
+
+#### 指数命令 (index)
+
+```bash
+# 列出所有可用指数（支持 --format 参数）
+finscraper index list
+finscraper index list --format json
+finscraper index list -f json
+
+# 获取指数实时行情（所有指数）
 finscraper index spot
 
+# 获取指定指数的实时行情
+finscraper index spot --symbols sh000001,sz399001
+finscraper index spot -s sh000001
+
 # 获取指数历史数据
+finscraper index history 000001
 finscraper index history 000001 --start-date 20240101 --end-date 20241231
+finscraper index history 000001 --period daily      # daily|weekly|monthly
 
 # 保存数据到文件
 finscraper index spot --output-path data/index_spot.csv
+finscraper index spot -p data/index_spot.csv
+finscraper index spot -p data/index_spot.json --output json
+```
 
+#### 北向资金命令 (north-flow)
+
+```bash
 # 获取北向资金日数据
 finscraper north-flow daily
 
-# 获取板块列表
-finscraper sector list
+# 获取北向资金日内数据
+finscraper north-flow intraday
+```
 
-# 获取板块实时行情
+#### 板块命令 (sector)
+
+```bash
+# 获取板块列表和实时行情
 finscraper sector spot
 
-# 获取大宗商品实时行情
+# （板块列表已集成在实时行情命令中）
+```
+
+#### 大宗商品命令 (commodity)
+
+```bash
+# 列出所有商品（支持 --format 参数）
+finscraper commodity list
+finscraper commodity list --format json
+finscraper commodity list -f json
+
+# 获取商品实时行情
 finscraper commodity spot
 
-# 获取资金流向数据
+# 获取商品历史数据
+finscraper commodity history AU0
+finscraper commodity history AU0 --start-date 20240101 --end-date 20241231
+finscraper commodity history AU0 --period daily      # daily|weekly|monthly
+
+# 保存数据到文件
+finscraper commodity spot --output-path data/commodity_spot.csv
+finscraper commodity spot -p data/commodity_spot.csv
+```
+
+#### 资金流向命令 (money-flow)
+
+```bash
+# 获取个股资金流向
+finscraper money-flow stock
+
+# 获取板块资金流向
+finscraper money-flow sector
+
+# 获取两市资金流向
 finscraper money-flow market
 
-# 获取全球新闻
+# 保存数据到文件
+finscraper money-flow stock --output-path data/stock_money_flow.csv
+finscraper money-flow stock -p data/stock_money_flow.csv
+```
+
+#### 新闻命令 (news)
+
+```bash
+# 获取全球财经资讯
 finscraper news global
 
-# JSON 输出
-finscraper index spot --format json
+# 获取A股公告
+finscraper news alert
 
-# 详细日志模式
-finscraper -v index spot
+# 获取个股资讯
+finscraper news stock 000001
 
-# 一键获取所有数据
+# 保存数据到文件
+finscraper news global --output-path data/global_news.csv
+finscraper news global -p data/global_news.csv
+```
+
+#### 一键获取所有数据
+
+> ⚠️ 功能开发中，暂不可用
+
+```bash
 finscraper fetch-all
+```
+
+#### 输出格式选项
+
+```bash
+# index list 命令支持 --format 参数
+finscraper index list --format table    # 默认，表格格式
+finscraper index list --format json     # JSON格式
+finscraper index list -f json
+
+# 文件保存格式（--output 参数）
+finscraper index spot --output csv      # CSV格式（默认）
+finscraper index spot --output json     # JSON格式
+finscraper index spot --output parquet  # Parquet格式
+finscraper index spot --output sqlite   # SQLite格式
+finscraper index spot -o json
+
+# 组合使用示例
+finscraper index spot -o csv -p data/spot.csv
+finscraper index list -f json -o json -p data/index.json
 ```
 
 ### 脚本使用
