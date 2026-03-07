@@ -26,14 +26,14 @@ class AkShareClient:
         """Get A-share index spot data."""
         try:
             logger.info("Fetching index spot data")
-            return ak.index_zh_a_spot_em()
+            return ak.stock_zh_index_spot_sina()
         except Exception as e:
             logger.error(f"Failed to fetch index spot data: {e}")
             raise NetworkError(f"Failed to fetch index spot data: {e}")
-    
-    def fetch_index_spot_em(self) -> pd.DataFrame:
-        """Fetch A-share index spot data from East Money."""
-        return self._call_akshare("index_zh_a_spot_em")
+
+    def fetch_index_spot_sina(self) -> pd.DataFrame:
+        """Fetch A-share index spot data from Sina."""
+        return self._call_akshare("stock_zh_index_spot_sina")
     
     @retry_with_backoff(max_retries=3, exceptions=(Exception,))
     def get_index_history(

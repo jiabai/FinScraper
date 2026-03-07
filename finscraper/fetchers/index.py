@@ -15,9 +15,9 @@ class IndexFetcher(BaseFetcher):
     def fetch_spot(self) -> pd.DataFrame:
         """Fetch index spot data."""
         self.logger.info("Fetching index spot data")
-        
+
         try:
-            df = self.client.fetch_index_spot_em()
+            df = self.client.fetch_index_spot_sina()
             if df is not None and not df.empty:
                 df = self.cleaner.clean_index_spot(df)
                 self.logger.info(f"Fetched {len(df)} index spot records")
