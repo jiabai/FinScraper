@@ -113,3 +113,56 @@ class DataCleaner:
         df = self.clean_column_names(df)
         df = self.convert_numeric_columns(df)
         return df
+    
+    def clean_commodity_spot(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean commodity spot data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_commodity_history(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean commodity historical data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_money_flow_stock(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean stock money flow data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_money_flow_sector(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean sector money flow data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_money_flow_market(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean market money flow data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_news_global(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean global news data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        return df
+    
+    def clean_news_alert(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean news alert data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        return df
+    
+    def clean_news_stock(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean stock news data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        return df
