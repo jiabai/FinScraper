@@ -18,7 +18,7 @@ app = typer.Typer(
 
 def version_callback(value: bool):
     if value:
-        typer.echo("FinScraper v0.1.0")
+        typer.echo("FinScraper v1.0.0")
         raise typer.Exit()
 
 
