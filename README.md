@@ -82,6 +82,42 @@ spot = fetcher.fetch_spot()
 stocks = fetcher.fetch_stocks("sector_code")
 ```
 
+#### CommodityFetcher
+
+```python
+from finscraper.fetchers.commodity import CommodityFetcher
+
+fetcher = CommodityFetcher()
+spot = fetcher.fetch_spot()
+history = fetcher.fetch_history(
+    symbol="AU0",
+    start_date="20240101",
+    end_date="20241231",
+)
+```
+
+#### MoneyFlowFetcher
+
+```python
+from finscraper.fetchers.money_flow import MoneyFlowFetcher
+
+fetcher = MoneyFlowFetcher()
+stock_flow = fetcher.fetch_stock()
+sector_flow = fetcher.fetch_sector()
+market_flow = fetcher.fetch_market()
+```
+
+#### NewsFetcher
+
+```python
+from finscraper.fetchers.news import NewsFetcher
+
+fetcher = NewsFetcher()
+global_news = fetcher.fetch_global()
+alerts = fetcher.fetch_alert()
+stock_news = fetcher.fetch_stock("000001")
+```
+
 ## 项目结构
 
 ```
