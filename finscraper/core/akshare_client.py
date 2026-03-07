@@ -101,3 +101,47 @@ class AkShareClient:
     def fetch_sector_detail_ths(self, symbol: str) -> pd.DataFrame:
         """Fetch sector detail from TongHuaShun."""
         return self._call_akshare("sector_detail_ths", symbol=symbol)
+    
+    def fetch_commodity_spot_em(self) -> pd.DataFrame:
+        """Fetch commodity spot data from East Money."""
+        return self._call_akshare("futures_zh_spot_em")
+    
+    def fetch_commodity_hist_em(
+        self,
+        symbol: str,
+        period: str = "daily",
+        start_date: str = "",
+        end_date: str = "",
+    ) -> pd.DataFrame:
+        """Fetch commodity historical data from East Money."""
+        return self._call_akshare(
+            "futures_zh_hist",
+            symbol=symbol,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
+        )
+    
+    def fetch_money_flow_stock_em(self) -> pd.DataFrame:
+        """Fetch stock money flow data from East Money."""
+        return self._call_akshare("stock_individual_fund_flow_rank", indicator="今日")
+    
+    def fetch_money_flow_sector_em(self) -> pd.DataFrame:
+        """Fetch sector money flow data from East Money."""
+        return self._call_akshare("stock_sector_fund_flow_rank", indicator="今日")
+    
+    def fetch_money_flow_market_em(self) -> pd.DataFrame:
+        """Fetch market money flow data from East Money."""
+        return self._call_akshare("stock_market_fund_flow")
+    
+    def fetch_news_global_em(self) -> pd.DataFrame:
+        """Fetch global news from East Money."""
+        return self._call_akshare("news_global")
+    
+    def fetch_news_alert_em(self) -> pd.DataFrame:
+        """Fetch news alerts from East Money."""
+        return self._call_akshare("stock_em_info_aj_em")
+    
+    def fetch_news_stock_em(self, symbol: str) -> pd.DataFrame:
+        """Fetch stock news from East Money."""
+        return self._call_akshare("stock_news_em", symbol=symbol)
