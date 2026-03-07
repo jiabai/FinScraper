@@ -22,17 +22,49 @@ finscraper index history 000001 --start-date 20240101 --end-date 20241231
 
 ### Python API 使用
 
+#### IndexFetcher
+
 ```python
 from finscraper.fetchers.index import IndexFetcher
 from finscraper.storage.csv_storage import CSVStorage
 
-# 获取数据
+# 获取指数实时行情
 fetcher = IndexFetcher()
 data = fetcher.fetch_spot()
+print(data)
 
-# 保存数据
+# 保存到文件
 storage = CSVStorage()
 storage.save(data, "data/index/spot.csv")
+
+# 获取历史数据
+history = fetcher.fetch_history(
+    symbol="000001",
+    start_date="20240101",
+    end_date="20241231",
+    period="daily",
+)
+```
+
+#### NorthFlowFetcher
+
+```python
+from finscraper.fetchers.north_flow import NorthFlowFetcher
+
+fetcher = NorthFlowFetcher()
+daily = fetcher.fetch_daily()
+intraday = fetcher.fetch_intraday()
+```
+
+#### SectorFetcher
+
+```python
+from finscraper.fetchers.sector import SectorFetcher
+
+fetcher = SectorFetcher()
+sectors = fetcher.fetch_list()
+spot = fetcher.fetch_spot()
+stocks = fetcher.fetch_stocks("sector_code")
 ```
 
 ## 项目结构
