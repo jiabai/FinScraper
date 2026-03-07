@@ -1,5 +1,13 @@
 import typer
 from typing_extensions import Annotated
+from finscraper.fetchers.index import IndexFetcher
+from finscraper.cli.utils import (
+    output_data,
+    save_data,
+    print_success,
+    print_error,
+    print_info,
+)
 
 index_app = typer.Typer(
     name="index",
@@ -19,7 +27,21 @@ def list_indices(
     ] = "table",
 ):
     """列出可用指数"""
-    typer.echo("Index list command - coming soon")
+    try:
+        fetcher = IndexFetcher()
+        data = fetcher.fetch_spot()
+        
+        if data is None or data.empty:
+            print_info("暂无数据")
+            return
+        
+        output = output_data(data, format=format)
+        typer.echo(output)
+        print_success(f"成功获取 {len(data)} 条指数数据")
+        
+    except Exception as e:
+        print_error(f"获取指数列表失败: {e}")
+        raise typer.Exit(code=1)
 
 
 @index_app.command("spot")
@@ -50,7 +72,30 @@ def spot_indices(
     ] = None,
 ):
     """获取实时行情"""
-    typer.echo("Index spot command - coming soon")
+    try:
+        fetcher = IndexFetcher()
+        data = fetcher.fetch_spot()
+        
+        if data is None or data.empty:
+            print_info("暂无数据")
+            return
+        
+        if symbols:
+            symbol_list = [s.strip() for s in symbols.split(",")]
+            if "代码" in data.columns:
+                data = data[data["代码"].isin(symbol_list)]
+        
+        output_data_str = output_data(data, format="table")
+        typer.echo(output_data_str)
+        print_success(f"成功获取 {len(data)} 条实时行情数据")
+        
+        if output_path:
+            save_data(data, output_path, format=output)
+            print_success(f"数据已保存到: {output_path}")
+        
+    except Exception as e:
+        print_error(f"获取实时行情失败: {e}")
+        raise typer.Exit(code=1)
 
 
 @index_app.command("history")
@@ -96,4 +141,27 @@ def history_index(
     ] = None,
 ):
     """获取历史数据"""
-    typer.echo("Index history command - coming soon")
+    try:
+        fetcher = IndexFetcher()
+        data = fetcher.fetch_history(
+            symbol=symbol,
+            start_date=start_date,
+            end_date=end_date,
+            period=period,
+        )
+        
+        if data is None or data.empty:
+            print_info("暂无数据")
+            return
+        
+        output_data_str = output_data(data, format="table")
+        typer.echo(output_data_str)
+        print_success(f"成功获取 {len(data)} 条历史数据")
+        
+        if output_path:
+            save_data(data, output_path, format=output)
+            print_success(f"数据已保存到: {output_path}")
+        
+    except Exception as e:
+        print_error(f"获取历史数据失败: {e}")
+        raise typer.Exit(code=1)
