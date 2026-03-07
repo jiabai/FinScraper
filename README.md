@@ -18,6 +18,21 @@ finscraper index spot
 
 # 获取指数历史数据
 finscraper index history 000001 --start-date 20240101 --end-date 20241231
+
+# 保存数据到文件
+finscraper index spot --output-path data/index_spot.csv
+
+# 获取北向资金日数据
+finscraper north-flow daily
+
+# 获取板块列表
+finscraper sector list
+
+# 获取板块实时行情
+finscraper sector spot
+
+# JSON 输出
+finscraper index spot --format json
 ```
 
 ### Python API 使用
