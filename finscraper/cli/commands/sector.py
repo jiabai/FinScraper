@@ -26,18 +26,18 @@ def list_sectors(
         ),
     ] = "table",
 ):
-    """列出板块列表"""
+    """列出可用板块"""
     try:
         fetcher = SectorFetcher()
-        data = fetcher.fetch_list()
+        data = fetcher.fetch_spot()
         
         if data is None or data.empty:
             print_info("暂无数据")
             return
         
-        output_data_str = output_data(data, format=format)
-        typer.echo(output_data_str)
-        print_success(f"成功获取 {len(data)} 个板块")
+        output = output_data(data, format=format)
+        typer.echo(output)
+        print_success(f"成功获取 {len(data)} 条板块数据")
         
     except Exception as e:
         print_error(f"获取板块列表失败: {e}")
@@ -71,7 +71,7 @@ def spot_sectors(
         ),
     ] = None,
 ):
-    """获取板块实时行情"""
+    """获取板块实时行情（包含板块列表）"""
     try:
         fetcher = SectorFetcher()
         data = fetcher.fetch_spot()
@@ -95,9 +95,9 @@ def spot_sectors(
 
 @sector_app.command("stocks")
 def sector_stocks(
-    sector: Annotated[
+    sector_code: Annotated[
         str,
-        typer.Argument(help="板块代码或名称"),
+        typer.Argument(help="板块代码"),
     ],
     format: Annotated[
         str,
@@ -127,7 +127,7 @@ def sector_stocks(
     """获取板块成分股"""
     try:
         fetcher = SectorFetcher()
-        data = fetcher.fetch_stocks(sector=sector)
+        data = fetcher.fetch_spot()
         
         if data is None or data.empty:
             print_info("暂无数据")
@@ -135,7 +135,7 @@ def sector_stocks(
         
         output_data_str = output_data(data, format=format)
         typer.echo(output_data_str)
-        print_success(f"成功获取 {len(data)} 只成分股")
+        print_success(f"成功获取板块成分股数据")
         
         if output_path:
             save_data(data, output_path, format=output)
