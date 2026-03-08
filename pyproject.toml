@@ -1,6 +1,6 @@
 [project]
 name = "finscraper"
-version = "1.0.0"
+version = "1.0.1"
 description = "基于 akshare 的金融数据获取工具"
 readme = "README.md"
 requires-python = ">=3.10"
