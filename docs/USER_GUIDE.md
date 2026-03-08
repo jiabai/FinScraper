@@ -57,7 +57,7 @@ FinScraper 是一款专业的金融数据获取工具，专注于为量化分析
 
 #### 数据获取能力
 
-FinScraper 提供 6 大类金融数据的获取能力：
+FinScraper 提供 10 大类金融数据的获取能力：
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -65,7 +65,9 @@ FinScraper 提供 6 大类金融数据的获取能力：
 ├─────────────┬─────────────┬─────────────┬───────────────┤
 │  A 股指数   │  北向资金   │  板块数据   │  大宗商品    │
 ├─────────────┼─────────────┼─────────────┼───────────────┤
-│  资金流向   │  重要新闻   │             │              │
+│  资金流向   │  重要新闻   │  市场情绪   │  港股指数    │
+├─────────────┼─────────────┼─────────────┼───────────────┤
+│  美股指数   │  汇率数据   │             │              │
 └─────────────┴─────────────┴─────────────┴───────────────┘
 ```
 
@@ -79,6 +81,10 @@ FinScraper 提供 6 大类金融数据的获取能力：
 | 大宗商品 | 实时 | 分钟级 | 商品期货分析 |
 | 资金流向 | 日频 | 日更新 | 主力资金追踪 |
 | 重要新闻 | 实时 | 即时 | 资讯驱动决策 |
+| 市场情绪 | 实时 | 分钟级 | 市场温度感知 |
+| 港股指数 | 实时 | 分钟级 | 港股走势监控 |
+| 美股指数 | 实时 | 分钟级 | 全球市场参考 |
+| 汇率数据 | 实时 | 分钟级 | 汇率走势分析 |
 
 ### 2.3 数据类型详解
 
@@ -243,6 +249,119 @@ FinScraper 提供 6 大类金融数据的获取能力：
 - 📊 **事件驱动**：基于新闻的事件驱动策略
 - 🔔 **风险预警**：负面新闻及时提醒
 - 📈 **机会发现**：利好消息带来的交易机会
+
+#### 市场情绪数据
+
+**功能描述**
+
+提供全面的市场情绪指标，感知市场温度：
+- 涨跌家数统计
+- 涨停/跌停股票列表
+- 综合市场情绪指数
+
+**数据字段**
+
+| 字段 | 说明 | 应用场景 |
+|-----|------|---------|
+| 上涨家数 | 涨幅 > 0 的股票数量 | 市场热度 |
+| 下跌家数 | 跌幅 < 0 的股票数量 | 市场恐慌 |
+| 平盘家数 | 涨跌幅 = 0 的股票数量 | 观望情绪 |
+| 涨停家数 | 涨停股票数量 | 赚钱效应 |
+| 跌停家数 | 跌停股票数量 | 风险释放 |
+
+**用户价值**
+
+- 🌡️ **市场温度**：直观感知市场整体情绪
+- 📊 **情绪周期**：识别情绪的高点和低点
+- 🎯 **交易择时**：情绪极值常伴随反转机会
+- ⚠️ **风险预警**：大面积跌停时谨慎操作
+
+#### 港股指数数据
+
+**功能描述**
+
+提供港股主要指数的实时行情和历史数据：
+- 恒生指数
+- 恒生科技指数
+- 恒生国企指数
+- 其他港股主要指数
+
+**数据字段**
+
+| 字段 | 说明 | 应用场景 |
+|-----|------|---------|
+| 指数代码 | 唯一标识 | 数据关联 |
+| 指数名称 | 中文名称 | 展示识别 |
+| 最新价 | 当前点位 | 实时监控 |
+| 涨跌额 | 绝对变化 | 波动分析 |
+| 涨跌幅 | 百分比变化 | 趋势判断 |
+| 成交量 | 成交股数 | 流动性分析 |
+| 成交额 | 成交金额 | 活跃度评估 |
+
+**用户价值**
+
+- 🌍 **跨市场分析**：A 股与港股联动分析
+- 📈 **港股投资**：港股走势监控
+- 🔗 **互联互通**：沪深港通相关分析
+- 📊 **估值对比**：A/H 股溢价分析
+
+#### 美股指数数据
+
+**功能描述**
+
+提供美股主要指数的实时行情和历史数据：
+- 道琼斯工业平均指数
+- 纳斯达克综合指数
+- 标准普尔 500 指数
+- 全球主要指数
+
+**数据字段**
+
+| 字段 | 说明 | 应用场景 |
+|-----|------|---------|
+| 指数代码 | 唯一标识 | 数据关联 |
+| 指数名称 | 中文名称 | 展示识别 |
+| 最新价 | 当前点位 | 实时监控 |
+| 涨跌额 | 绝对变化 | 波动分析 |
+| 涨跌幅 | 百分比变化 | 趋势判断 |
+| 成交量 | 成交股数 | 流动性分析 |
+| 成交额 | 成交金额 | 活跃度评估 |
+
+**用户价值**
+
+- 🌐 **全球视角**：美股作为全球市场风向标
+- 📈 **外盘参考**：美股走势影响 A 股开盘
+- 🔗 **跨市场联动**：中美股市关联性分析
+- 📊 **宏观参考**：美股反映全球经济状况
+
+#### 汇率数据
+
+**功能描述**
+
+提供主要货币对的实时汇率和历史数据：
+- 美元兑人民币（USD/CNY）
+- 美元兑离岸人民币（USD/CNH）
+- 欧元、日元、港币等主要货币
+- 多周期历史数据
+
+**数据字段**
+
+| 字段 | 说明 | 应用场景 |
+|-----|------|---------|
+| 货币对代码 | 唯一标识 | 数据关联 |
+| 货币对名称 | 中文名称 | 展示识别 |
+| 最新价 | 当前汇率 | 实时监控 |
+| 涨跌额 | 绝对变化 | 波动分析 |
+| 涨跌幅 | 百分比变化 | 趋势判断 |
+| 最高价 | 时段最高 | 波动分析 |
+| 最低价 | 时段最低 | 波动分析 |
+
+**用户价值**
+
+- 💱 **汇率监控**：实时关注汇率走势
+- 🌍 **外贸分析**：进出口企业汇率风险管理
+- 📊 **宏观分析**：汇率反映经济基本面
+- 🔗 **资产配置**：汇率影响跨境资产配置
 
 ### 2.4 适用场景与价值
 
@@ -682,7 +801,215 @@ urls = filter.get_topic_urls(df, topic="中东地缘")
 - **新能源**: 光伏、风电、电动车等相关新闻
 - **房地产**: 房地产行业相关新闻
 
-### 5.8 输出格式选项
+### 5.7 市场情绪命令 (`sentiment`)
+
+获取市场情绪相关数据，包括涨跌家数、涨停跌停等。
+
+```bash
+# 查看帮助
+finscraper sentiment --help
+```
+
+##### 获取综合市场情绪数据
+
+```bash
+# 获取综合市场情绪数据（涨跌家数、涨停跌停等）
+finscraper sentiment spot
+
+# 保存到文件
+finscraper sentiment spot --output csv --output-path sentiment.csv
+```
+
+##### 获取涨跌家数数据
+
+```bash
+# 获取所有A股实时行情数据（用于统计涨跌家数）
+finscraper sentiment up-down
+
+# 保存到文件
+finscraper sentiment up-down -p up_down.csv
+```
+
+##### 获取涨停股票列表
+
+```bash
+# 获取今日涨停股票
+finscraper sentiment limit-up
+
+# 获取指定日期涨停股票
+finscraper sentiment limit-up --date 20250308
+
+# 保存到文件
+finscraper sentiment limit-up -p limit_up.csv
+```
+
+##### 获取跌停股票列表
+
+```bash
+# 获取今日跌停股票
+finscraper sentiment limit-down
+
+# 获取指定日期跌停股票
+finscraper sentiment limit-down --date 20250308
+
+# 保存到文件
+finscraper sentiment limit-down -p limit_down.csv
+```
+
+##### Python API 使用
+
+```python
+from finscraper.fetchers import MarketSentimentFetcher
+
+fetcher = MarketSentimentFetcher()
+
+# 获取综合市场情绪数据
+sentiment = fetcher.fetch_sentiment()
+print(sentiment)
+
+# 获取所有A股数据
+all_stocks = fetcher.fetch_up_down_count()
+print(f"上涨: {(all_stocks['change_percent'] > 0).sum()}")
+print(f"下跌: {(all_stocks['change_percent'] < 0).sum()}")
+
+# 获取涨停股票
+limit_up = fetcher.fetch_limit_up()
+print(f"涨停数: {len(limit_up)}")
+
+# 获取跌停股票
+limit_down = fetcher.fetch_limit_down()
+print(f"跌停数: {len(limit_down)}")
+```
+
+### 5.8 港股命令 (`hk`)
+
+获取港股/恒生指数相关数据。
+
+```bash
+# 查看帮助
+finscraper hk --help
+```
+
+##### 获取港股指数实时行情
+
+```bash
+# 获取港股指数实时行情
+finscraper hk spot
+
+# 保存到文件
+finscraper hk spot --output csv --output-path hk_indices.csv
+```
+
+##### Python API 使用
+
+```python
+from finscraper.fetchers import HKIndexFetcher
+
+fetcher = HKIndexFetcher()
+
+# 获取港股指数实时行情
+hk_data = fetcher.fetch_spot()
+print(hk_data[hk_data['name'].str.contains('恒生')])
+```
+
+### 5.9 美股命令 (`us`)
+
+获取美股指数相关数据。
+
+```bash
+# 查看帮助
+finscraper us --help
+```
+
+##### 获取美股指数实时行情
+
+```bash
+# 获取美股指数实时行情（道指、纳指、标普500）
+finscraper us spot
+
+# 保存到文件
+finscraper us spot --output csv --output-path us_indices.csv
+```
+
+##### 获取全球指数实时行情
+
+```bash
+# 获取全球指数实时行情
+finscraper us global
+
+# 保存到文件
+finscraper us global -p global_indices.csv
+```
+
+##### Python API 使用
+
+```python
+from finscraper.fetchers import USIndexFetcher
+
+fetcher = USIndexFetcher()
+
+# 获取美股指数实时行情
+us_data = fetcher.fetch_spot()
+print(us_data)
+
+# 获取全球指数实时行情
+global_data = fetcher.fetch_global()
+print(global_data)
+```
+
+### 5.10 汇率命令 (`fx`)
+
+获取汇率相关数据。
+
+```bash
+# 查看帮助
+finscraper fx --help
+```
+
+##### 获取汇率实时行情
+
+```bash
+# 获取汇率实时行情
+finscraper fx spot
+
+# 保存到文件
+finscraper fx spot --output csv --output-path forex.csv
+```
+
+##### 获取汇率历史数据
+
+```bash
+# 获取美元兑离岸人民币历史数据（默认近一年）
+finscraper fx history USDCNH
+
+# 指定日期范围
+finscraper fx history USDCNH --start-date 20240101 --end-date 20241231
+
+# 保存到文件
+finscraper fx history USDCNH -p usdcnh_history.csv
+```
+
+##### Python API 使用
+
+```python
+from finscraper.fetchers import ForexFetcher
+
+fetcher = ForexFetcher()
+
+# 获取汇率实时行情
+fx_data = fetcher.fetch_spot()
+print(fx_data[fx_data['symbol'] == 'USDCNH'])
+
+# 获取汇率历史数据
+history = fetcher.fetch_history(
+    symbol="USDCNH",
+    start_date="20240101",
+    end_date="20241231",
+)
+print(history.head())
+```
+
+### 5.11 输出格式选项
 
 #### 屏幕输出格式
 
@@ -735,11 +1062,17 @@ finscraper -q north-flow daily -p data/north.csv
 # 创建数据目录
 mkdir -p data/$(date +%Y%m%d)
 
-# 批量获取各类数据
+# 批量获取各类数据（传统数据源）
 finscraper index spot -p data/$(date +%Y%m%d)/indices.csv
 finscraper north-flow daily -p data/$(date +%Y%m%d)/north_flow.csv
 finscraper sector spot -p data/$(date +%Y%m%d)/sectors.csv
 finscraper commodity spot -p data/$(date +%Y%m%d)/commodities.csv
+
+# 批量获取新增数据源
+finscraper sentiment spot -p data/$(date +%Y%m%d)/sentiment.csv
+finscraper hk spot -p data/$(date +%Y%m%d)/hk_indices.csv
+finscraper us spot -p data/$(date +%Y%m%d)/us_indices.csv
+finscraper fx spot -p data/$(date +%Y%m%d)/forex.csv
 ```
 
 ---
@@ -863,6 +1196,79 @@ alerts = fetcher.fetch_alert()
 
 # 个股新闻
 stock_news = fetcher.fetch_stock("000001")
+```
+
+#### 市场情绪
+
+```python
+from finscraper.fetchers import MarketSentimentFetcher
+
+fetcher = MarketSentimentFetcher()
+
+# 获取综合市场情绪数据
+sentiment = fetcher.fetch_sentiment()
+print(sentiment)
+
+# 获取所有A股数据
+all_stocks = fetcher.fetch_up_down_count()
+print(f"上涨: {(all_stocks['change_percent'] > 0).sum()}")
+print(f"下跌: {(all_stocks['change_percent'] < 0).sum()}")
+
+# 获取涨停股票
+limit_up = fetcher.fetch_limit_up()
+print(f"涨停数: {len(limit_up)}")
+
+# 获取跌停股票
+limit_down = fetcher.fetch_limit_down()
+print(f"跌停数: {len(limit_down)}")
+```
+
+#### 港股指数
+
+```python
+from finscraper.fetchers import HKIndexFetcher
+
+fetcher = HKIndexFetcher()
+
+# 获取港股指数实时行情
+hk_data = fetcher.fetch_spot()
+print(hk_data[hk_data['name'].str.contains('恒生')])
+```
+
+#### 美股指数
+
+```python
+from finscraper.fetchers import USIndexFetcher
+
+fetcher = USIndexFetcher()
+
+# 获取美股指数实时行情
+us_data = fetcher.fetch_spot()
+print(us_data)
+
+# 获取全球指数实时行情
+global_data = fetcher.fetch_global()
+print(global_data)
+```
+
+#### 汇率数据
+
+```python
+from finscraper.fetchers import ForexFetcher
+
+fetcher = ForexFetcher()
+
+# 获取汇率实时行情
+fx_data = fetcher.fetch_spot()
+print(fx_data[fx_data['symbol'] == 'USDCNH'])
+
+# 获取汇率历史数据
+history = fetcher.fetch_history(
+    symbol="USDCNH",
+    start_date="20240101",
+    end_date="20241231",
+)
+print(history.head())
 ```
 
 ### 6.3 在代码中保存数据

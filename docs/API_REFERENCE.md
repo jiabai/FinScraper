@@ -523,6 +523,314 @@ def fetch_stock(symbol: str) -> pd.DataFrame:
 
 ---
 
+### MarketSentimentFetcher
+
+市场情绪数据获取器（涨跌家数、涨停跌停）。
+
+```python
+from finscraper.fetchers import MarketSentimentFetcher
+
+fetcher = MarketSentimentFetcher()
+```
+
+#### 方法
+
+##### fetch_sentiment
+
+获取综合市场情绪数据。
+
+```python
+def fetch_sentiment() -> pd.DataFrame:
+    """获取综合市场情绪数据。
+
+    Returns:
+        DataFrame 包含以下列：
+            - up_count: 上涨家数
+            - down_count: 下跌家数
+            - flat_count: 平盘家数
+            - limit_up_count: 涨停家数
+            - limit_down_count: 跌停家数
+    """
+```
+
+**示例**:
+
+```python
+# 获取市场情绪数据
+data = fetcher.fetch_sentiment()
+print(data)
+```
+
+##### fetch_up_down_count
+
+获取涨跌家数数据。
+
+```python
+def fetch_up_down_count() -> pd.DataFrame:
+    """获取涨跌家数数据。
+
+    Returns:
+        DataFrame 包含所有A股实时行情数据。
+    """
+```
+
+**示例**:
+
+```python
+# 获取所有A股数据
+data = fetcher.fetch_up_down_count()
+print(f"上涨家数: {(data['change_percent'] > 0).sum()}")
+print(f"下跌家数: {(data['change_percent'] < 0).sum()}")
+```
+
+##### fetch_limit_up
+
+获取涨停股票列表。
+
+```python
+def fetch_limit_up(date: Optional[str] = None) -> pd.DataFrame:
+    """获取涨停股票列表。
+
+    Args:
+        date: 日期，格式 YYYYMMDD，默认为今日。
+
+    Returns:
+        DataFrame 包含涨停股票数据。
+    """
+```
+
+**示例**:
+
+```python
+# 获取今日涨停股票
+data = fetcher.fetch_limit_up()
+print(f"涨停数: {len(data)}")
+
+# 获取指定日期涨停股票
+data = fetcher.fetch_limit_up(date="20250308")
+```
+
+##### fetch_limit_down
+
+获取跌停股票列表。
+
+```python
+def fetch_limit_down(date: Optional[str] = None) -> pd.DataFrame:
+    """获取跌停股票列表。
+
+    Args:
+        date: 日期，格式 YYYYMMDD，默认为今日。
+
+    Returns:
+        DataFrame 包含跌停股票数据。
+    """
+```
+
+**示例**:
+
+```python
+# 获取今日跌停股票
+data = fetcher.fetch_limit_down()
+print(f"跌停数: {len(data)}")
+```
+
+---
+
+### HKIndexFetcher
+
+港股/恒生指数数据获取器。
+
+```python
+from finscraper.fetchers import HKIndexFetcher
+
+fetcher = HKIndexFetcher()
+```
+
+#### 方法
+
+##### fetch_spot
+
+获取港股指数实时行情。
+
+```python
+def fetch_spot() -> pd.DataFrame:
+    """获取港股指数实时行情。
+
+    Returns:
+        DataFrame 包含以下列：
+            - symbol: 指数代码
+            - name: 指数名称
+            - price: 最新价
+            - change: 涨跌额
+            - change_percent: 涨跌幅
+            - volume: 成交量
+            - amount: 成交额
+            - updated_at: 更新时间
+    """
+```
+
+**示例**:
+
+```python
+# 获取港股指数实时行情
+data = fetcher.fetch_spot()
+print(data[data['name'].str.contains('恒生')])
+```
+
+---
+
+### USIndexFetcher
+
+美股指数数据获取器（道指、纳指、标普500）。
+
+```python
+from finscraper.fetchers import USIndexFetcher
+
+fetcher = USIndexFetcher()
+```
+
+#### 方法
+
+##### fetch_spot
+
+获取美股指数实时行情。
+
+```python
+def fetch_spot() -> pd.DataFrame:
+    """获取美股指数实时行情。
+
+    Returns:
+        DataFrame 包含以下列：
+            - symbol: 指数代码
+            - name: 指数名称
+            - price: 最新价
+            - change: 涨跌额
+            - change_percent: 涨跌幅
+            - volume: 成交量
+            - amount: 成交额
+            - updated_at: 更新时间
+    """
+```
+
+**示例**:
+
+```python
+# 获取美股指数实时行情
+data = fetcher.fetch_spot()
+print(data)  # 包含道琼斯、纳斯达克、标普500
+```
+
+##### fetch_global
+
+获取全球指数实时行情。
+
+```python
+def fetch_global() -> pd.DataFrame:
+    """获取全球指数实时行情。
+
+    Returns:
+        DataFrame 包含全球主要指数数据。
+    """
+```
+
+**示例**:
+
+```python
+# 获取全球指数实时行情
+data = fetcher.fetch_global()
+print(data)
+```
+
+---
+
+### ForexFetcher
+
+汇率数据获取器。
+
+```python
+from finscraper.fetchers import ForexFetcher
+
+fetcher = ForexFetcher()
+```
+
+#### 方法
+
+##### fetch_spot
+
+获取汇率实时行情。
+
+```python
+def fetch_spot() -> pd.DataFrame:
+    """获取汇率实时行情。
+
+    Returns:
+        DataFrame 包含以下列：
+            - symbol: 货币对代码
+            - name: 货币对名称
+            - price: 最新价
+            - change: 涨跌额
+            - change_percent: 涨跌幅
+            - high: 最高价
+            - low: 最低价
+            - open: 开盘价
+            - close: 收盘价
+            - updated_at: 更新时间
+    """
+```
+
+**示例**:
+
+```python
+# 获取汇率实时行情
+data = fetcher.fetch_spot()
+print(data[data['symbol'] == 'USDCNH'])  # 美元兑离岸人民币
+```
+
+##### fetch_history
+
+获取汇率历史数据。
+
+```python
+def fetch_history(
+    symbol: str,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    period: str = "daily",
+) -> pd.DataFrame:
+    """获取汇率历史数据。
+
+    Args:
+        symbol: 货币对代码，如 'USDCNH'。
+        start_date: 开始日期，格式 YYYYMMDD。
+        end_date: 结束日期，格式 YYYYMMDD。
+        period: 周期，可选 'daily', 'weekly', 'monthly'。
+
+    Returns:
+        DataFrame 包含以下列：
+            - date: 日期
+            - open: 开盘价
+            - high: 最高价
+            - low: 最低价
+            - close: 收盘价
+            - change: 涨跌额
+            - change_percent: 涨跌幅
+    """
+```
+
+**示例**:
+
+```python
+# 获取美元兑离岸人民币历史数据
+data = fetcher.fetch_history(
+    symbol="USDCNH",
+    start_date="20240101",
+    end_date="20241231",
+)
+print(data.head())
+```
+
+---
+
 ## 存储模块 (Storage)
 
 存储模块提供多种格式的数据存储支持。
