@@ -145,3 +145,137 @@ class AkShareClient:
     def fetch_news_stock_em(self, symbol: str) -> pd.DataFrame:
         """Fetch stock news from East Money."""
         return self._call_akshare("stock_news_em", symbol=symbol)
+    
+    def fetch_stock_zh_a_spot_em(self) -> pd.DataFrame:
+        """Fetch all A-share spot data from East Money."""
+        return self._call_akshare("stock_zh_a_spot_em")
+    
+    def fetch_stock_zh_a_spot_sina(self) -> pd.DataFrame:
+        """Fetch all A-share spot data from Sina (alternative source)."""
+        return self._call_akshare("stock_zh_a_spot")
+    
+    def fetch_stock_sh_a_spot_em(self) -> pd.DataFrame:
+        """Fetch Shanghai A-share spot data from East Money."""
+        return self._call_akshare("stock_sh_a_spot_em")
+    
+    def fetch_stock_sz_a_spot_em(self) -> pd.DataFrame:
+        """Fetch Shenzhen A-share spot data from East Money."""
+        return self._call_akshare("stock_sz_a_spot_em")
+    
+    def fetch_stock_zh_a_spot_fallback(self) -> pd.DataFrame:
+        """Fetch A-share spot data with fallback to alternative sources.
+        
+        Tries multiple sources in order:
+        1. East Money (stock_zh_a_spot_em)
+        2. Sina Finance (stock_zh_a_spot)  
+        3. Separate SH/SZ exchanges from East Money
+        """
+        sources = [
+            ("East Money", self.fetch_stock_zh_a_spot_em),
+            ("Sina", self.fetch_stock_zh_a_spot_sina),
+        ]
+        
+        for source_name, fetch_func in sources:
+            try:
+                logger.info(f"Trying to fetch from {source_name}...")
+                df = fetch_func()
+                if df is not None and not df.empty:
+                    logger.info(f"Successfully fetched {len(df)} stocks from {source_name}")
+                    return df
+            except Exception as e:
+                logger.warning(f"Failed to fetch from {source_name}: {e}")
+        
+        logger.warning("Primary sources failed, trying fallback (separate SH/SZ)...")
+        try:
+            sh_df = self.fetch_stock_sh_a_spot_em()
+            sz_df = self.fetch_stock_sz_a_spot_em()
+            if sh_df is not None and sz_df is not None:
+                result = pd.concat([sh_df, sz_df], ignore_index=True)
+                logger.info(f"Fetched {len(result)} stocks via fallback (SH: {len(sh_df)}, SZ: {len(sz_df)})")
+                return result
+        except Exception as e2:
+            logger.error(f"All fallback methods failed: {e2}")
+        
+        raise NetworkError(f"Failed to fetch A-share spot data from all available sources")
+    
+    def fetch_stock_zt_pool_em(self, date: str = "") -> pd.DataFrame:
+        """Fetch limit-up stock pool from East Money."""
+        if date:
+            return self._call_akshare("stock_zt_pool_em", date=date)
+        return self._call_akshare("stock_zt_pool_em")
+    
+    def fetch_stock_dt_pool_em(self, date: str = "") -> pd.DataFrame:
+        """Fetch limit-down stock pool from East Money."""
+        if date:
+            return self._call_akshare("stock_zt_pool_dtgc_em", date=date)
+        return self._call_akshare("stock_zt_pool_dtgc_em")
+    
+    def fetch_index_hk_spot_em(self) -> pd.DataFrame:
+        """Fetch Hong Kong index spot data from Sina."""
+        return self._call_akshare("stock_hk_index_spot_sina")
+    
+    def fetch_index_us_spot(self, symbol: str = ".DJI") -> pd.DataFrame:
+        """Fetch US index spot data from Sina (returns historical data, need to get latest close)."""
+        return self._call_akshare("index_us_stock_sina", symbol=symbol)
+    
+    def fetch_us_index_latest(self) -> dict:
+        """Fetch latest US index data from Sina."""
+        indices = {
+            ".DJI": "道琼斯",
+            ".IXIC": "纳斯达克",
+            ".INX": "标普500"
+        }
+        result = {}
+        for symbol, name in indices.items():
+            try:
+                df = self._call_akshare("index_us_stock_sina", symbol=symbol)
+                if df is not None and not df.empty:
+                    latest = df.iloc[-1]
+                    result[name] = {
+                        'price': latest['close'],
+                        'change': latest.get('close', 0) - latest.get('open', 0),
+                        'change_percent': ((latest.get('close', 0) - latest.get('open', 0)) / latest.get('open', 1) * 100) if latest.get('open', 0) else 0
+                    }
+            except Exception as e:
+                logger.warning(f"Failed to fetch US index {name}: {e}")
+        return result
+    
+    def fetch_index_global_spot(self) -> pd.DataFrame:
+        """Fetch global index spot data."""
+        return self._call_akshare("index_global_spot")
+    
+    def fetch_forex_spot_em(self) -> pd.DataFrame:
+        """Fetch forex spot data from East Money (deprecated)."""
+        return self._call_akshare("forex_spot_em")
+    
+    def fetch_forex_latest(self, symbol: str = "USDCNH") -> dict:
+        """Fetch latest forex data from East Money."""
+        try:
+            df = self._call_akshare("forex_hist_em", symbol=symbol)
+            if df is not None and not df.empty:
+                latest = df.iloc[-1]
+                return {
+                    'symbol': symbol,
+                    'price': latest.get('最新价', 0),
+                    'open': latest.get('今开', 0),
+                    'change_percent': latest.get('振幅', 0)
+                }
+        except Exception as e:
+            logger.warning(f"Failed to fetch forex {symbol}: {e}")
+        return {}
+    
+    def fetch_forex_hist_em(
+        self,
+        symbol: str,
+        period: str = "daily",
+        start_date: str = "",
+        end_date: str = "",
+    ) -> pd.DataFrame:
+        """Fetch forex historical data from East Money."""
+        return self._call_akshare(
+            "forex_hist_em",
+            symbol=symbol,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
+        )

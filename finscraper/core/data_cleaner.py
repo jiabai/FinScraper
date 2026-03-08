@@ -166,3 +166,59 @@ class DataCleaner:
         df = df.copy()
         df = self.clean_column_names(df)
         return df
+    
+    def clean_market_sentiment_spot(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean market sentiment spot data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_limit_up(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean limit-up stock data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_limit_down(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean limit-down stock data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_hk_index_spot(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean Hong Kong index spot data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_us_index_spot(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean US index spot data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_global_index_spot(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean global index spot data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_forex_spot(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean forex spot data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
+    
+    def clean_forex_history(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Clean forex historical data."""
+        df = df.copy()
+        df = self.clean_column_names(df)
+        df = self.convert_numeric_columns(df)
+        return df
