@@ -621,6 +621,64 @@ finscraper news stock 000001
 finscraper news stock 000001 -p data/stock_000001_news.csv
 ```
 
+#### 专题新闻筛选
+
+FinScraper 支持按特定主题筛选新闻，帮助你快速获取关注领域的资讯。
+
+##### 列出所有可用专题
+
+```bash
+finscraper news topics
+```
+
+##### 获取指定专题的新闻
+
+```bash
+# 获取中东地缘相关新闻
+finscraper news topic --name "中东地缘"
+
+# 仅输出 URL 列表
+finscraper news topic --name "中东地缘" --urls-only
+
+# 保存到文件
+finscraper news topic --name "中东地缘" --output csv --output-path middle_east_news.csv
+
+# 同时匹配新闻内容
+finscraper news topic --name "中东地缘" --match-content
+```
+
+##### Python API 使用
+
+```python
+from finscraper.filters import TopicFilter
+import akshare as ak
+
+# 获取新闻数据
+df = ak.stock_info_global_em()
+
+# 创建筛选器
+filter = TopicFilter()
+
+# 列出可用专题
+topics = filter.list_topics()
+print(topics)  # ['中东地缘', '全国两会', '美联储', ...]
+
+# 筛选专题新闻
+filtered_df = filter.filter_by_topic(df, topic="中东地缘")
+
+# 获取 URL 列表
+urls = filter.get_topic_urls(df, topic="中东地缘")
+```
+
+##### 内置专题
+
+- **中东地缘**: 中东地区相关新闻（以色列、巴勒斯坦、伊朗、沙特等）
+- **全国两会**: 全国人大、政协相关新闻
+- **美联储**: 美联储货币政策相关新闻
+- **人工智能**: AI、大模型相关新闻
+- **新能源**: 光伏、风电、电动车等相关新闻
+- **房地产**: 房地产行业相关新闻
+
 ### 5.8 输出格式选项
 
 #### 屏幕输出格式
