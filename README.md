@@ -186,6 +186,50 @@ finscraper index spot -o csv -p data/spot.csv
 finscraper index list -f json -o json -p data/index.json
 ```
 
+### 配置选项
+
+FinScraper 支持通过环境变量或配置文件进行配置。
+
+#### 环境变量配置
+
+所有配置项都可以通过 `FINSCRAPER_` 前缀的环境变量设置：
+
+| 环境变量 | 默认值 | 说明 |
+|---------|-------|------|
+| `FINSCRAPER_REQUEST_TIMEOUT` | `30` | 请求超时时间（秒） |
+| `FINSCRAPER_MAX_RETRIES` | `3` | 最大重试次数 |
+| `FINSCRAPER_USER_AGENT` | Mozilla/5.0 | 请求 User-Agent |
+| `FINSCRAPER_DATA_DIR` | `data` | 数据存储目录 |
+| `FINSCRAPER_LOG_LEVEL` | `INFO` | 日志级别 (DEBUG/INFO/WARNING/ERROR/CRITICAL) |
+| `FINSCRAPER_LOG_FILE` | `logs/finscraper.log` | 日志文件路径 |
+
+示例：
+```bash
+# 设置更长的超时时间
+export FINSCRAPER_REQUEST_TIMEOUT=60
+
+# 启用调试日志
+export FINSCRAPER_LOG_LEVEL=DEBUG
+```
+
+#### 配置文件
+
+可以使用 YAML 配置文件，通过 `--config` 选项指定：
+
+```bash
+finscraper -c config.yaml index spot
+```
+
+配置文件示例（`config.yaml`）：
+```yaml
+request_timeout: 60
+max_retries: 5
+user_agent: "FinScraper/1.0.0"
+data_dir: "my_data"
+log_level: "DEBUG"
+log_file: "my_logs/finscraper.log"
+```
+
 ### 脚本使用
 
 ```bash
@@ -288,13 +332,16 @@ FinScraper/
 │   ├── fetchers/        # 数据获取模块
 │   ├── models/          # 数据模型
 │   ├── storage/         # 存储模块
+│   ├── cli/             # CLI 模块
 │   └── config/          # 配置文件
 ├── tests/               # 测试代码
 ├── data/                # 数据文件（不提交到Git）
 ├── docs/                # 文档
 ├── scripts/             # 脚本文件
 ├── pyproject.toml       # 项目配置
-└── README.md            # 项目说明
+├── config.yaml.example  # 配置文件示例
+├── README.md            # 项目说明
+└── .gitignore           # Git 忽略文件
 ```
 
 ## 开发

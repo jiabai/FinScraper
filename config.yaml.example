@@ -1,0 +1,20 @@
+# FinScraper 配置文件示例
+# 复制此文件为 config.yaml 并根据需要修改
+
+# 请求超时时间（秒）
+request_timeout: 30
+
+# 最大重试次数
+max_retries: 3
+
+# 请求 User-Agent
+user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+# 数据存储目录
+data_dir: "data"
+
+# 日志级别 (DEBUG/INFO/WARNING/ERROR/CRITICAL)
+log_level: "INFO"
+
+# 日志文件路径
+log_file: "logs/finscraper.log"

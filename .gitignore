@@ -132,3 +132,4 @@ logs/
 *.db
 *.sqlite
 *.sqlite3
+config.yaml
