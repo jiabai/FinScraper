@@ -198,6 +198,10 @@ FinScraper/
 │   │   ├── commodity.py     # 大宗商品模型
 │   │   ├── money_flow.py    # 资金流向模型
 │   │   └── news.py          # 新闻模型
+│   ├── filters/              # 数据筛选模块
+│   │   ├── __init__.py
+│   │   ├── topic_filter.py  # 主题新闻筛选器
+│   │   └── topic_config.py  # 主题关键词配置
 │   ├── storage/              # 存储模块
 │   │   ├── __init__.py
 │   │   ├── base.py          # 基础存储
@@ -213,6 +217,7 @@ FinScraper/
 │   ├── test_cli/            # CLI 测试
 │   ├── test_fetchers/
 │   ├── test_core/
+│   ├── test_filters/         # 筛选模块测试
 │   ├── test_models/
 │   └── test_storage/
 ├── data/                     # 数据文件（不提交）
@@ -558,6 +563,29 @@ finscraper news stock 000001 \
     --output-path data/news/stock_000001.json
 ```
 
+**topics - 列出所有可用专题**
+```bash
+finscraper news topics
+```
+
+**topic - 获取指定专题的新闻**
+```bash
+# 获取中东地缘相关新闻（表格格式）
+finscraper news topic --name "中东地缘"
+
+# 仅输出纯 URL 列表
+finscraper news topic --name "中东地缘" --urls-only
+
+# 简要输出（标题、时间、摘要、链接）
+finscraper news topic --name "中东地缘" --brief
+
+# 保存到文件
+finscraper news topic --name "中东地缘" --output csv --output-path middle_east_news.csv
+
+# 同时匹配新闻内容
+finscraper news topic --name "中东地缘" --match-content
+```
+
 #### 3.4.9 Fetch-All 命令详解
 
 **一键获取所有数据**
@@ -889,6 +917,29 @@ class NewsItem(BaseModel):
 - `ak.stock_zh_a_alert_em()` - A 股公告
 - `ak.stock_zh_a_eminfo(symbol)` - 个股资讯
 
+#### 3.6.7 主题新闻筛选需求
+
+**功能描述**: 支持按特定主题关键词筛选新闻，帮助用户快速获取关注领域的资讯
+
+**内置主题**:
+- 中东地缘: 中东地区相关新闻（以色列、巴勒斯坦、伊朗、沙特等）
+- 全国两会: 全国人大、政协相关新闻
+- 美联储: 美联储货币政策相关新闻
+- 人工智能: AI、大模型相关新闻
+- 新能源: 光伏、风电、电动车等相关新闻
+- 房地产: 房地产行业相关新闻
+
+**筛选功能**:
+- 列出所有可用专题
+- 按专题名称筛选新闻（基于标题关键词匹配）
+- 支持同时匹配新闻内容
+- 支持仅输出新闻 URL 列表
+- 支持简要输出（标题、时间、摘要、链接）
+- 支持多专题同时筛选
+
+**akshare 接口**:
+- `ak.stock_info_global_em()` - 全球财经资讯（用于筛选）
+
 ### 3.7 API 设计
 
 #### 3.7.1 Python 库使用示例
@@ -896,7 +947,9 @@ class NewsItem(BaseModel):
 ```python
 from finscraper.fetchers.index import IndexFetcher
 from finscraper.fetchers.north_flow import NorthFlowFetcher
+from finscraper.filters import TopicFilter
 from finscraper.storage.csv_storage import CSVStorage
+import akshare as ak
 
 index_fetcher = IndexFetcher()
 spot_data = index_fetcher.fetch_spot()
@@ -909,6 +962,16 @@ storage.save(history_data, "data/index/000001_history.csv")
 
 north_flow_fetcher = NorthFlowFetcher()
 north_flow_data = north_flow_fetcher.fetch_daily()
+
+# 主题新闻筛选示例
+df = ak.stock_info_global_em()
+filter = TopicFilter()
+topics = filter.list_topics()
+print("可用专题:", topics)
+filtered_df = filter.filter_by_topic(df, topic="中东地缘")
+print(filtered_df)
+urls = filter.get_topic_urls(df, topic="中东地缘")
+print("相关新闻URL:", urls)
 ```
 
 #### 3.7.2 CLI 使用示例
