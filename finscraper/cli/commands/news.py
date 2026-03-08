@@ -175,7 +175,11 @@ def topic_news(
     ] = None,
     urls_only: Annotated[
         bool,
-        typer.Option("--urls-only", "-u", help="仅输出URL列表"),
+        typer.Option("--urls-only", "-u", help="仅输出纯URL列表"),
+    ] = False,
+    brief: Annotated[
+        bool,
+        typer.Option("--brief", "-b", help="简要输出（标题、时间、摘要、链接）"),
     ] = False,
     match_content: Annotated[
         bool,
@@ -205,6 +209,19 @@ def topic_news(
             return
         
         if urls_only:
+            urls = filtered_df["链接"].tolist()
+            print_success(f"找到 {len(urls)} 条相关新闻:")
+            for i, url in enumerate(urls, 1):
+                print(f"{i}. {url}")
+            
+            if output_path:
+                with open(output_path, "w", encoding="utf-8") as f:
+                    for url in urls:
+                        f.write(f"{url}\n")
+                print_success(f"URL列表已保存到: {output_path}")
+            return
+        
+        if brief:
             print_success(f"找到 {len(filtered_df)} 条相关新闻:")
             print("=" * 80)
             

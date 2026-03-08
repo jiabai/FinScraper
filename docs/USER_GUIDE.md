@@ -634,11 +634,14 @@ finscraper news topics
 ##### 获取指定专题的新闻
 
 ```bash
-# 获取中东地缘相关新闻
+# 获取中东地缘相关新闻（表格格式）
 finscraper news topic --name "中东地缘"
 
-# 仅输出 URL 列表
+# 仅输出纯 URL 列表
 finscraper news topic --name "中东地缘" --urls-only
+
+# 简要输出（标题、时间、摘要、链接）
+finscraper news topic --name "中东地缘" --brief
 
 # 保存到文件
 finscraper news topic --name "中东地缘" --output csv --output-path middle_east_news.csv
