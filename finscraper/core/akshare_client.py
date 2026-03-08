@@ -104,7 +104,7 @@ class AkShareClient:
     
     def fetch_commodity_spot_em(self) -> pd.DataFrame:
         """Fetch commodity spot data from East Money."""
-        return self._call_akshare("futures_zh_spot_em")
+        return self._call_akshare("futures_global_spot_em")
     
     def fetch_commodity_hist_em(
         self,
@@ -124,11 +124,11 @@ class AkShareClient:
     
     def fetch_money_flow_stock_em(self) -> pd.DataFrame:
         """Fetch stock money flow data from East Money."""
-        return self._call_akshare("stock_individual_fund_flow_rank", indicator="今日")
+        return self._call_akshare("stock_fund_flow_individual")
     
     def fetch_money_flow_sector_em(self) -> pd.DataFrame:
         """Fetch sector money flow data from East Money."""
-        return self._call_akshare("stock_sector_fund_flow_rank", indicator="今日")
+        return self._call_akshare("stock_fund_flow_industry")
     
     def fetch_money_flow_market_em(self) -> pd.DataFrame:
         """Fetch market money flow data from East Money."""
@@ -136,11 +136,11 @@ class AkShareClient:
     
     def fetch_news_global_em(self) -> pd.DataFrame:
         """Fetch global news from East Money."""
-        return self._call_akshare("news_global")
+        raise NotImplementedError("news_global function not available in current AkShare version")
     
     def fetch_news_alert_em(self) -> pd.DataFrame:
         """Fetch news alerts from East Money."""
-        return self._call_akshare("stock_em_info_aj_em")
+        return self._call_akshare("stock_news_main_cx")
     
     def fetch_news_stock_em(self, symbol: str) -> pd.DataFrame:
         """Fetch stock news from East Money."""
