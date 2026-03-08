@@ -1,4 +1,5 @@
 import typer
+import pandas as pd
 from typing_extensions import Annotated
 from finscraper.fetchers.news import NewsFetcher
 from finscraper.filters import TopicFilter, get_topics
@@ -204,16 +205,24 @@ def topic_news(
             return
         
         if urls_only:
-            urls = filtered_df["链接"].tolist()
-            print_success(f"找到 {len(urls)} 条相关新闻:")
-            for i, url in enumerate(urls, 1):
-                print(f"{i}. {url}")
+            print_success(f"找到 {len(filtered_df)} 条相关新闻:")
+            print("=" * 80)
+            
+            output_lines = []
+            for idx, row in filtered_df.iterrows():
+                print(f"【{idx+1}】标题: {row['标题']}")
+                print(f"  时间: {row.get('发布时间', 'N/A')}")
+                print(f"  摘要: {row.get('摘要', 'N/A')[:100]}..." if pd.notna(row.get('摘要')) else "  摘要: N/A")
+                print(f"  链接: {row['链接']}")
+                print("-" * 80)
+                
+                output_line = f"标题: {row['标题']}\n时间: {row.get('发布时间', 'N/A')}\n摘要: {row.get('摘要', 'N/A')}\n链接: {row['链接']}\n{'='*80}\n"
+                output_lines.append(output_line)
             
             if output_path:
                 with open(output_path, "w", encoding="utf-8") as f:
-                    for url in urls:
-                        f.write(f"{url}\n")
-                print_success(f"URL列表已保存到: {output_path}")
+                    f.writelines(output_lines)
+                print_success(f"数据已保存到: {output_path}")
             return
         
         print_info(f"找到 {len(filtered_df)} 条相关新闻")
