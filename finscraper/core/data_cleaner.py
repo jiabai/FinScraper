@@ -18,8 +18,8 @@ class DataCleaner:
         df = df.copy()
         for col in df.columns:
             try:
-                df[col] = pd.to_numeric(df[col], errors="ignore")
-            except Exception:
+                df[col] = pd.to_numeric(df[col])
+            except (ValueError, TypeError):
                 pass
         return df
     
