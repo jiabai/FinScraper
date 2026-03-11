@@ -28,13 +28,13 @@ class CommodityFetcher(BaseFetcher):
     
     def fetch_spot(self) -> pd.DataFrame:
         """Fetch commodity spot data."""
-        self.logger.info("Fetching commodity spot data")
+        self.logger.debug("Fetching commodity spot data")
         
         try:
             df = self.client.fetch_commodity_spot_em()
             if df is not None and not df.empty:
                 df = self.cleaner.clean_commodity_spot(df)
-                self.logger.info(f"Fetched {len(df)} commodity spot records")
+                self.logger.debug(f"Fetched {len(df)} commodity spot records")
             return df
         except Exception as e:
             self.logger.error(f"Failed to fetch commodity spot data: {e}")

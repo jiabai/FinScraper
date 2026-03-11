@@ -16,6 +16,10 @@ from finscraper.fetchers.hk_index import HKIndexFetcher
 from finscraper.fetchers.us_index import USIndexFetcher
 from datetime import datetime
 
+# 过滤代理设置：清除系统代理，确保 akshare 请求不走代理
+for key in ['HTTP_PROXY', 'HTTPS_PROXY', 'http_proxy', 'https_proxy']:
+    if key in os.environ:
+        del os.environ[key]
 
 class MarketOverview:
     """市场概览数据聚合器"""
@@ -29,7 +33,12 @@ class MarketOverview:
     
     def get_index_summary(self):
         """获取 A 股指数摘要"""
-        df = self.index_fetcher.fetch_spot()
+        try:
+            df = self.index_fetcher.fetch_spot()
+            if df is None or len(df) == 0:
+                return {}
+        except Exception as e:
+            return {}
         
         main_indices = {
             'sh000001': '沪指',
@@ -59,7 +68,7 @@ class MarketOverview:
                 period='daily'
             )
             if df_history is not None and len(df_history) >= days:
-                recent_avg = df_history.tail(days)['amount'].mean()
+                recent_avg = df_history.tail(days)['成交额'].mean()
                 ratio = today_amount / recent_avg
                 if ratio > 1.2:
                     return '放量', ratio
@@ -113,6 +122,8 @@ class MarketOverview:
         """获取大宗商品数据（黄金、原油）"""
         try:
             df = self.commodity_fetcher.fetch_spot()
+            if df is None or len(df) == 0:
+                return {}
             result = {}
             
             gold_keywords = ['黄金', '金', 'GOLD']
@@ -143,6 +154,8 @@ class MarketOverview:
         """获取港股指数数据"""
         try:
             df = self.hk_index_fetcher.fetch_spot()
+            if df is None or len(df) == 0:
+                return {}
             for _, row in df.iterrows():
                 name = str(row.get('名称', ''))
                 if '恒生' in name:
@@ -159,6 +172,8 @@ class MarketOverview:
         """获取美股指数数据"""
         try:
             us_data = self.us_index_fetcher.fetch_latest()
+            if us_data is None:
+                return {}
             return us_data
         except Exception as e:
             return {}
